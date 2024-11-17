@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load recipes %}
+
+{% block title %}Інформація про користувача {{ user.username }}{% endblock title %}
+{% block h1 %}Інформація про користувача {{ user.username }}{% endblock h1 %}
+
+{% block content %}
+{% if request.user == user %}
+<a href="{% url 'user_update_info' user.username %}" class="btn btn-primary mb-3">Редагувати інформацію</a>
+{% endif %}
+<section class="row">
+    <div class="col-lg-4">
+        {% if additional_info.avatar %}
+        <img class="img-fluid rounded-start mx-auto d-block" src="{{ additional_info.avatar.url }}" alt="Аватар">
+        {% else %}
+        <img class="img-fluid rounded-start mx-auto d-block" src="{% static 'img/user-placeholder.jpg' %}" alt="Аватар">
+        {% endif %}
+    </div>
+
+    <div class="col-lg-6">
+        <p><strong>Ім'я:</strong> {{ user.first_name }}</p>
+        <p><strong>Фамілія:</strong> {{ user.last_name }}</p>
+        <p><strong>Дата народження:</strong> {{ additional_info.date_of_birth }}</p>
+        <p><strong>Місце проживання:</strong> {{ additional_info.place }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Дата реєстрації:</strong> {{ user.date_joined }}</p>
+        <p><strong>Був у мережі:</strong> {{ user.last_login }}</p>
+    </div>
+
+    <div class="mt-3">
+    <h2>Про себе:</h2>
+    <p>{{ additional_info.about|linebreaks }}</p>
+    </div>
+</section>
+<h2>Останні рецепти користувача:</h2>
+{% last_recipes user 3 %}
+{% endblock content %}

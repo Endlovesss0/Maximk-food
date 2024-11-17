@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Видалення рецепта{% endblock title %}
+
+{% block h1 %}Ви точно хочете видалити рецепт? "{{ recipe.title }}"?{% endblock h1 %}
+
+{% block content %}
+
+<form class="mt-2 mb-2" action="{% url 'recipe_delete' recipe.pk %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Так</button>
+    <a href="{{ recipe.get_absolute_url }}" class="btn btn-danger btn-block">Відмінити</a>
+</form>
+
+{% endblock content %}

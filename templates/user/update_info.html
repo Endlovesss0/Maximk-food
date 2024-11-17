@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Редагування інформації про користувача {{ user.username }}{% endblock title %}
+{% block h1 %}Редагування інформації про користувача {{ user.username }}{% endblock h1 %}
+
+{% block content %}
+<section class="row">
+    <div class="col-lg-6">
+        <h2>Основна інформація</h2>
+        <p><strong>Ім'я:</strong> {{ user.first_name }}</p>
+        <p><strong>Фамілія:</strong> {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <a href="{% url 'user_update_main_info' user.username %}" class="btn btn-primary">Редагувати</a>
+    </div>
+    <div class="col-lg-6">
+        <h2>Додаткова інформація</h2>
+        <p><strong>Аватар:</strong></p>
+        {% if additional_info.avatar %}
+        <img class="img-fluid rounded-start mx-auto d-block" src="{{ additional_info.avatar.url }}" alt="Аватар">
+        {% else %}
+        <p>Немає аватара</p>
+        {% endif %}
+        <p><strong>Дата народження:</strong> {{ additional_info.date_of_birth }}</p>
+        <p><strong>Місце проживання:</strong> {{ additional_info.place }}</p>
+        <p><strong>Про себе:</strong></p>
+        <p>{{ additional_info.about|linebreaks }}</p>
+        <a href="{% url 'user_update_additional_info' user.username %}" class="btn btn-primary">Редагувати</a>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<form class="mb-3" action="{% url 'recipe_filter' %}" method="get" role="search">
+    <div class="d-flex mb-3">
+        <input class="form-control me-2" type="search" placeholder="Пошук рецептів за назвою" aria-label="Search"
+               name="title" value="{{ request.GET.title }}">
+        <button class="btn btn-outline-success" type="submit">Шукати</button>
+    </div>
+
+    <div>
+        <select class="form-select" aria-label="Сортування" name="order_by">
+            <option selected value="oldest">Спочатку старі</option>
+            <option value="newest">Спочатку нові</option>
+            <option value="title">По алфавіту</option>
+            <option value="views">Найбільш переглянуті</option>
+        </select>
+    </div>
+</form>

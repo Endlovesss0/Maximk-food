@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Створення нового рецепта{% endblock title %}
+
+{% block h1 %}Створення нового рецепта{% endblock h1 %}
+
+{% block content %}
+
+<form class="mt-2 mb-2" action="{% url 'recipe_create' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Створити</button>
+    <a href="{% url 'recipe_list' %}" class="btn btn-danger btn-block">Відмінити</a>
+</form>
+
+{% endblock content %}

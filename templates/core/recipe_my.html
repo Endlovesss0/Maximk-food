@@ -1,0 +1,12 @@
+{% extends 'core/recipe_list.html' %}
+
+{% block title %}Мої рецепти{% endblock title %}
+{% block h1 %}Мої рецепти{% endblock h1 %}
+
+{% block published %}
+{% if recipe.is_published %}
+<small class="text-muted">Опублікувати</small>
+{% else %}
+<small class="text-danger">Не опублікований</small>
+{% endif %}
+{% endblock published %}

@@ -1,0 +1,51 @@
+{% load static %}
+<header class="container mb-4">
+    <div class="row m-0 gx-0">
+        <nav class="col-lg-8 navbar navbar-expand-lg bg-light">
+            <a class="navbar-brand" href="{% url 'home' %}">DjangoRecipes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Головна</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipe_list' %}">Всі рецепти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipe_my' %}">Мої рецепти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipe_favorite' %}">Вибрані рецепти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_contact_us' %}">Зв'язатись з нами</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="col-lg-4 navbar-text">
+        {% if request.user.is_authenticated %}
+           Вітаємо,
+            {% if request.user.additional_info.avatar %}
+            <img class="rounded" src="{{ request.user.additional_info.avatar.url }}" alt="Аватар" height="50px">
+            {% else %}
+            <img class="rounded" src="{% static 'img/user-placeholder.jpg' %}" alt="Аватар" height="50px">
+            {% endif %}
+            <a class="link link-primary" href="{% url 'user_info' request.user.username %}">{{ request.user.username }}</a>
+            &nbsp;|
+            <a class="btn btn-outline-primary" href="{% url 'logout' %}">Вийти</a>
+        {% else %}
+            Ви не авторизовані |
+            <a class="btn btn-outline-primary" href="{% url 'login' %}">Зайти</a> |
+            <a class="btn btn-outline-primary" href="{% url 'register' %}">Зареєструватись</a>
+        {% endif %}
+        </div>
+    </div>
+</header>

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Змінити рецепт{% endblock title %}
+
+{% block h1 %}Змінити рецепт {{ recipe.title }}{% endblock h1 %}
+
+{% block content %}
+
+<p>Інградієнти:</p>
+{% for ingredient in ingredients %}
+<p>{{ ingredient.ingredient.name }} - {{ ingredient.quantity }} {{ ingredient.unit }}
+    <a href="{% url 'delete_ingredient' ingredient.pk %}" class="link link-danger">Видалити</a></p>
+{% endfor %}
+
+<button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#ingredientForm"
+        aria-expanded="false" aria-controls="ingredientForm">
+    Добавити інградієнти
+</button>
+<form class="collapse" id="ingredientForm" action="{% url 'add_ingredient' recipe.pk %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="ingredientName" class="form-label">Назва інградієнта</label>
+        <input name="name" type="text" class="form-control" id="ingredientName">
+    </div>
+    <div class="mb-3">
+        <label for="ingredientQuantity" class="form-label">Кількість</label>
+        <input name="quantity" type="number" class="form-control" id="ingredientQuantity">
+    </div>
+    <div class="mb-3">
+        <label for="ingredientUnit" class="form-label">Одиниця вимірювання</label>
+        <input name="unit" type="text" class="form-control" id="ingredientUnit">
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Добавити</button>
+</form>
+<hr>
+
+<form class="mt-2 mb-2" action="{% url 'recipe_update' recipe.pk %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Зберегти</button>
+    <a href="{{ recipe.get_absolute_url }}" class="btn btn-danger btn-block">Відмінити</a>
+</form>
+
+{% endblock content %}

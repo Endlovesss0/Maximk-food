@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Вхід{% endblock title %}
+{% block h1 %}Ввійти в акаунт{% endblock h1 %}
+
+{% block content %}
+
+{% if form.errors %}
+{% for error in errors %}
+<div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endfor %}
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>У вас немає доступу до цієї сторінки.
+        Будь ласка, увійдіть до облікового запису, який дозволяє переглядати запитану сторінку.</p>
+    {% else %}
+    <p>Будь ласка, увійдіть до облікового запису, щоб переглянути цю сторінку.</p>
+    {% endif %}
+{% endif %}
+
+<form class="mt-2 mb-2" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Ввійти</button>
+    <p class="mt-3">Ще не зареєстровані? <a href="{% url 'register' %}">Зареєструватись</a></p>
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+{% endblock %}

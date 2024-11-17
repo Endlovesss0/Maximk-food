@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %} | DjangoRecipes</title>
+
+    <link href="{% static 'libs/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'libs/bootstrap-icons-1.8.3/bootstrap-icons.css' %}" rel="stylesheet">
+</head>
+<body>
+{% include "include/_navbar.html" %}
+
+<main class="container">
+    <h1 class="mb-3">{% block h1 %}Base{% endblock h1 %}</h1>
+    {% include "include/_messages.html" %}
+    {% block content %}
+    {% endblock content %}
+</main>
+
+<script src="{% static 'libs/bootstrap/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

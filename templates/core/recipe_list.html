@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Всі рецепти{% endblock title %}
+{% block h1 %}Всі рецепти{% endblock h1 %}
+
+{% block content %}
+{% include "core/include/_filter.html" %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for recipe in recipes %}
+    <div class="col">
+        <div class="card h-100">
+            {% if recipe.image %}
+            <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+            {% else %}
+            <img class="card-img-top" src="{% static 'img/recipe-placeholder.png' %}" alt="{{ recipe.title }}">
+            {% endif %}
+
+            <div class="card-body">
+                <a class="text-decoration-none" href="{% url 'recipe_detail' recipe.pk %}">
+                    <h5 class="card-title">{{ recipe.title }}</h5>
+                </a>
+                {% if recipe.description %}
+                <p class="card-text">{{ recipe.description|truncatechars:150 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="card-footer">
+                <small class="text-muted">{{ recipe.created_at }}</small>
+                {% block published %}{% endblock published %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<a href="{% url 'recipe_create'%}" class="btn btn-primary mt-3">Створити новий рецепт</a>
+{% include 'core/include/_pagination.html' %}
+{% endblock content %}

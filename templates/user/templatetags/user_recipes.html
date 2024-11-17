@@ -1,0 +1,24 @@
+{% load static %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for recipe in recipes %}
+    <div class="col">
+        <div class="card h-100">
+            {% if recipe.image %}
+            <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+            {% else %}
+            <img class="card-img-top" src="{% static 'img/recipe-placeholder.png' %}" alt="{{ recipe.title }}">
+            {% endif %}
+
+            <div class="card-body">
+                <a class="text-decoration-none" href="{% url 'recipe_detail' recipe.pk %}">
+                    <h5 class="card-title">{{ recipe.title }}</h5>
+                </a>
+            </div>
+
+            <div class="card-footer">
+                <small class="text-muted">{{ recipe.created_at }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Головна сторінка{% endblock title %}
+{% block h1 %}Головна сторінка{% endblock h1 %}
+
+{% block content %}
+<p>Ласкаво просимо до сайту DjangoRecipes! Тут ви можете ділитися своїми рецептами, переглядати рецепти інших
+    користувачів та багато іншого</p>
+<a class="d-block" href="{% url 'recipe_list' %}">Усі рецепти</a>
+{% if request.user.is_authenticated %}
+<a class="d-block" href="{% url 'recipe_my' %}">Мої рецепти</a>
+<a class="d-block" href="{% url 'recipe_favorite' %}">Вибрані рецепти</a>
+<a class="d-block" href="{% url 'recipe_create' %}">Створити новий рецепт</a>
+<a class="d-block" href="{% url 'user_info' request.user.username %}">Мій профіль</a>
+{% endif %}
+{% endblock content %}

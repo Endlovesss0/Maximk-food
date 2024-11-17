@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Реєстрація{% endblock title %}
+
+{% block h1 %}Реєстрація{% endblock h1 %}
+
+{% block content %}
+
+{% if form.errors %}
+{% for error in errors %}
+<div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endfor %}
+{% endif %}
+
+<form class="mt-2 mb-2" action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Зареєструватись</button>
+</form>
+
+<script>
+    inputs = document.getElementsByTagName("input");
+    for (let input of inputs)
+    {
+        input.className = "form-control";
+    }
+</script>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ recipe.title }}{% endblock title %}
+{% block h1 %}
+{{ recipe.title }}
+{% if request.user.is_authenticated %}
+<form class="d-inline" action="{% url 'recipe_add_to_favorite' recipe.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="border-0" style="background-color: #fff;">
+        {% if recipe.is_favorite %}
+        <i class="bi bi-star-fill" style="color: gold;" title="Видалити з улюбеного"></i>
+        {% else %}
+        <i class="bi bi-star" style="color: gold;" title="Добавити в улюблене"></i>
+        {% endif %}
+    </button>
+</form>
+{% endif %}
+{% endblock h1 %}
+
+{% block content %}
+<div class="mb-3">
+    <strong>Створений: </strong>{{ recipe.created_at|date }} |
+    <strong>Обновлений: </strong>{{ recipe.updated_at|date }}
+</div>
+<div class="mb-3">
+    <strong>Автор: </strong><a class="link link-primary" href="{% url 'user_info' recipe.user.username %}">{{ recipe.user.username }}</a>
+    | <a class="link link-primary" href="{% url 'recipe_filter' %}?user={{ recipe.user.username }}">Всі рецепти користувача {{ recipe.user.username }}</a>
+</div>
+<div class="mb-3">
+    <strong>Переглядів: </strong> {{ recipe.views }}
+</div>
+{% if recipe.description %}
+<p class="mb-3">
+    {{ recipe.description }}
+</p>
+{% endif %}
+<section class="row">
+    <div class="col-lg-4">
+        {% if recipe.image %}
+        <img class="img-fluid rounded-start mx-auto d-block" src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+        {% else %}
+        <img class="img-fluid rounded-start mx-auto d-block" src="{% static 'img/recipe-placeholder.png' %}"
+             alt="{{ recipe.title }}">
+        {% endif %}
+    </div>
+    <div class="col-lg-6">
+        <h2>Інгадієнти:</h2>
+        {% for ingredient in ingredients %}
+        <p><a href="{{ ingredient.ingredient.get_absolute_url }}">
+            {{ ingredient.ingredient.name }}</a> - {{ ingredient.quantity }} {{ ingredient.unit }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+    <h2>Рецепт:</h2>
+    <p>{{ recipe.content|safe }}</p>
+    </div>
+</section>
+{% if recipe.user == request.user %}
+{% if not recipe.is_published %}
+<p class="mt-3">Рецепт ще не опублікований. <a href="{% url 'recipe_publish' recipe.pk %}">Опублікувати</a></p>
+{% endif %}
+<a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-primary mt-3">Змінити рецепт</a>
+<a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-danger mt-3">Видалити рецепт</a>
+{% endif %}
+
+<h2 class="mt-3">Коментарі:</h2>
+<div>
+    {% if user.is_authenticated %}
+    <p>Залишити коментарі:</p>
+    <form action="{% url 'recipe_comment' recipe.pk %}" method="post" class="mb-3">
+        {% csrf_token %}
+        {{ comment_form.media }}
+        {{ comment_form.as_p }}
+        <p id="replyTo"></p>
+
+        <button type="submit" class="btn btn-primary btn-block">Відправити</button>
+    </form>
+    {% endif %}
+    {% for comment in comments %}
+    <div>
+        <a name="comment{{ comment.pk }}"></a>
+        {% if comment.user.additional_info.avatar %}
+        <img class="rounded" src="{{ comment.user.additional_info.avatar.url }}" alt="Аватар" height="50px">
+        {% else %}
+        <img class="rounded" src="{% static 'img/user-placeholder.jpg' %}" alt="Аватар" height="50px">
+        {% endif %}
+
+        <a class="link link-primary" href="{% url 'user_info' comment.user.username %}">{{ comment.user.username }}</a>
+        {{ comment.created_at }}
+        <button class="btn btn-outline-primary" onclick="addParent({{ comment.pk}}, '{{ comment.user.username }}');">Відповісти</button>
+
+        <p>{{ comment.text|safe }}</p>
+        {% if comment.parent %}
+        <p>Відповідь на <a href="#comment{{ comment.parent.pk }}">
+            коментар користувача {{ comment.parent.user.username }}</a></p>
+        {% endif %}
+        <hr>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function addParent(parent, username){
+        input = document.getElementById("id_parent");
+        input.value = parent;
+        replyTo = document.getElementById("replyTo");
+        replyTo.textContent = "Відповідь користувачу " + username;
+    }
+</script>
+{% endblock content %}
